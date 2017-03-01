@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    tools:context="com.example.maxim.musify.activities.MainActivity"
+    android:background="@color/colorPrimaryLight"
+    android:adjustViewBounds="true">
+
+
+    <!--binding-->
+    <data>
+        <drawable name="clr">@color/background_light/</drawable>
+        <variable
+            name="bind"
+            type="com.example.maxim.musify.bindings.BindingManager" />
+    </data>
+
+    <!--MAIN LAYOUT-->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="10"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <!--Navigation buttons menu-->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_search"
+                android:id="@+id/imageButton7"
+                android:onClick="@{()->bind.mainModel.OpenSearch()}"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_filter"
+                android:id="@+id/imageButton8"
+                android:onClick="@{()->bind.mainModel.OpenSearchFilters()}"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_list"
+                android:id="@+id/imageButton6"
+                android:onClick="@{()->bind.mainModel.OpenSongsList()}"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <!--Music View layout-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:padding="5dp"
+            android:gravity="center"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@{bind.mainModel.mainImage ?? @drawable/example_image}"
+                android:scaleType="fitCenter"
+                android:background="@color/colorPrimaryDark"
+                />
+
+        </LinearLayout>
+
+        <!--Play controls menu-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:layout_margin="5dp"
+           >
+
+
+            <!--Seek Bar Menu-->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:weightSum="10"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:text="@{bind.mainModel.IntToTimeFormat(bind.mainModel.songsManager.position)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView5"
+                    android:textColor="@color/colorPrimaryLight"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+
+                <SeekBar
+                    android:layout_width="wrap_content"
+                    android:id="@+id/seekBar"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:clickable="true"
+
+                    android:onProgressChanged="@{bind.mainModel::SeekBarChange}"
+                    android:max="@{bind.mainModel.songsManager.duration}"
+                    android:progress="@{bind.mainModel.songsManager.position}"/>
+
+                <TextView
+                    android:layout_marginRight="5dp"
+                    android:text="@{(bind.mainModel.songsManager.duration - bind.mainModel.songsManager.position)/1000>0?'-'+bind.mainModel.IntToTimeFormat(bind.mainModel.songsManager.duration - bind.mainModel.songsManager.position):bind.mainModel.IntToTimeFormat(bind.mainModel.songsManager.duration - bind.mainModel.songsManager.position)}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView4"
+                    android:textColor="@color/colorPrimaryLight"
+                    android:textAlignment="center"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <!--PLAY Buttons MENU-->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal|center"
+                android:weightSum="10"
+                android:layout_weight="3"
+                android:padding="0dp">
+
+                <ToggleButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageButton4"
+                    style="@style/toggleButtonStyle"
+                    android:background="@drawable/button_shuffle_selector"
+                    android:onClick="@{()->bind.mainModel.ToggleShuffle()}"
+                    android:checked="@={bind.mainModel.songsManager.shuffle}"
+                    />
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageButton3"
+                    android:layout_weight="0"
+                    app:srcCompat="@drawable/button_previoustrack_selector"
+                    android:background="@android:color/transparent"
+                    android:onClick="@{()->bind.mainModel.PreviousTrack()}"/>
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                <ToggleButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageButton"
+                    android:layout_weight="0"
+                    android:background="@drawable/button_playpause_selector"
+                    android:checked="@={bind.mainModel.songsManager.playing}"
+                    android:onClick="@{()->bind.mainModel.TogglePlay()}"
+                    style="@style/toggleButtonStyle"/>
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageButton2"
+                    app:srcCompat="@drawable/button_nexttrack_selector"
+                    android:onClick="@{()->bind.mainModel.NextTrack()}"
+                    android:background="@android:color/transparent" />
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+                <ToggleButton
+                    android:id="@+id/imageButton5"
+                    android:onClick="@{()->bind.mainModel.ToggleRepeat()}"
+                    android:checked="@={bind.mainModel.songsManager.repeat}"
+                    android:background="@drawable/button_repeat_selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/toggleButtonStyle" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
